@@ -1,6 +1,7 @@
 ## A "getting started" guide for students at Boise State University that will follow the first Lunchbot Research Group members
 
 ### Lunchbot Site
+[Lunchbot!](http://www.lunchbot.online/)
 
 ### Additional Links
 
