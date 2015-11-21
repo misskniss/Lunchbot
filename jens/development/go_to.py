@@ -29,12 +29,8 @@ from sys import executable
 
 class GoTo():
     def __init__(self, target):
-        print "Target Type is: "
-        print type(target)
+        # note: target is coming in as a list and the Points() needs each item as a float.
         x, y, z = target
-        print x
-        print y
-        print z
         rospy.init_node('Jen_GoTo', anonymous=False)
 
 	#what to do if shut down (e.g. ctrl + C or failure)
