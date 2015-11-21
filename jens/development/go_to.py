@@ -29,7 +29,12 @@ from sys import executable
 
 class GoTo():
     def __init__(self, target):
+        print "Target Type is: "
+        print type(target)
         x, y, z = target
+        print x
+        print y
+        print z
         rospy.init_node('Jen_GoTo', anonymous=False)
 
 	#what to do if shut down (e.g. ctrl + C or failure)
@@ -47,7 +52,7 @@ class GoTo():
 	goal.target_pose.header.frame_id = 'map'
 	goal.target_pose.header.stamp = rospy.Time.now()
 	#customize the following Point() values so they are appropriate for your location
-	goal.target_pose.pose = Pose(Point(x, y, z), Quaternion(0.000, 0.000, 0.892, -1.500))
+	goal.target_pose.pose = Pose(Point(float(x), float(y), float(z)), Quaternion(0.000, 0.000, 0.892, -1.500))
 
 	#start moving
         self.move_base.send_goal(goal)
@@ -105,13 +110,13 @@ if __name__ == '__main__':
     print "Loading map..."
     map_call = "loadmap " + the_map
     #subprocess.Popen(map_call, shell=True, executable='/usr/local/bin/interactive_bash')
-    subprocess.Popen([map_call], shell=True, executable='/usr/local/bin/interactive_bash')
+    #subprocess.Popen([map_call], shell=True, executable='/usr/local/bin/interactive_bash')
     print "Heading to location..."
     target = room.split(",")
     print target 
     GoTo(target);
-    print "Returning Home..."
-    GoTo(dock)
+    #print "Returning Home..."
+    #GoTo(dock)
     #subprocess.Popen('charger', shell=True, executable='/usr/local/bin/interactive_bash')
     #subprocess.Popen('chargetime', shell=True, executable='/usr/local/bin/interactive_bash')
 
