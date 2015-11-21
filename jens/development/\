@@ -69,9 +69,6 @@ class GoTo():
     def shutdown(self):
         rospy.loginfo("Stop")
 
-    def dummy(self, string):
-        print string
-
 
 
 if __name__ == '__main__':
@@ -80,30 +77,27 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("room", help="example: MEC202P")
     args = parser.parse_args()
+    print args.room
     
-    def fetch_location_specs(location):
-        print "Looking up: " + location
+    def fetch_map(location):
+        print "asked for:" + location
+        print "with call passed: " + args.room
         try: 
             locations = open('./LOCATIONS.txt', 'r')
-            lines = iter(locations)
-            for line in lines:
-                if line.startswith(location):
-                    print "Found match for " + location 
-                    assoc_map = next(lines)
-                    dock_points = next(lines)
-                    room_point = next(lines)
-                    #print "map is: " + assoc_map + "At Coordinates: " + room_point + " Dock Location: " + dock_points
-                    return assoc_map,room_point,dock_points
-        except rospy.ROSInterruptException: 
+            request = locations.readline()
+            print "found line: " + request
+            if location in request:
+                assoc_map = locations.readline()
+                print "map is: " + assoc_map
+                dock_points = locations.readline()
+                room_point = locations.readline()
+                return assoc_map
+        except rospy.ROSInterruptException:
             rospy.loginfo("Exception thrown")
 
     
-    location_specs = fetch_location_specs(args.room)
-    the_map,room,dock = location_specs
-    print "Map: " + the_map + "Target: " + room + "Home: " + dock
-    print "Loading map..."
-    print "Heading to location..."
-    print "Returning Home..."
+    floor_map = fetch_map(args.room)
+    print "load map: " + floor_map
     #current = subprocess.call('rosrun tf tf_echo /map /base_link', shell=True)
     #subprocess.call('chargetime', shell=True, executable='/usr/local/bin/interactive_bash')
 

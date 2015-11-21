@@ -18,13 +18,32 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #TurtleBot must have minimal.launch & amcl_demo.launch running prior to starting this script.
 
 import rospy
+import subprocess
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import actionlib
 from actionlib_msgs.msg import *
 from geometry_msgs.msg import Pose, PoseWithCovarianceStamped, Point, Quaternion, Twist
 
 class GoToPose():
+    
+    
     def __init__(self):
+        dock = -1.25,60.4,0.0
+        near_dock = -1.5,60.4,0.0
+        jens_chair = (-3.14,62.4,0.0)
+        black_shelves = (-6.81,63.1,0.0)
+        before_lab_door = (-7.29,64,0.0)
+        after_lab_door = (-7.16,65.2,0.0)
+        mid_first_hall = (-2.75,64.5,0.0)
+        corner = (0.574,63.8,0.0)
+        past_conference_room = (0.028,60.7,0.0)
+        start_cubes_1 = (-0.691,57.9,0.0)
+        end_cubes_1 = (-1.32,55.3,0.0)
+        start_cubes_2 = (-1.95,52.9,0.0)
+        end_cubes_2 = (-2.24, 50.9,0.0)
+        mid_cubes_3 = (-2.95, 48.4,0.0)
+        end_cubes_3 = (-2.77,45.2,0.0)
+        
         rospy.init_node('nav_test', anonymous=False)
 
 	#what to do if shut down (e.g. ctrl + C or failure)
@@ -35,21 +54,43 @@ class GoToPose():
 	self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
 	rospy.loginfo("wait for the action server to come up")
 	#allow up to 5 seconds for the action server to come up
-	self.move_base.wait_for_server(rospy.Duration(5))
+	self.move_base.wait_for_server(rospy.Duration(8))
 
 	#we'll send a goal to the robot to tell it to move to a pose that's near the docking station
 	goal = MoveBaseGoal()
 	goal.target_pose.header.frame_id = 'map'
 	goal.target_pose.header.stamp = rospy.Time.now()
 	#customize the following Point() values so they are appropriate for your location
-	goal.target_pose.pose = Pose(Point(2.18, -1.7, 0.000), Quaternion(0.000, 0.000, 0.892, -1.500))
-
-	#start moving
-        self.move_base.send_goal(goal)
-
-	#allow TurtleBot up to 60 seconds to complete task
+        
+        self.move_to(near_dock, goal)
 	success = self.move_base.wait_for_result(rospy.Duration(60)) 
-
+        #self.move_to(jens_chair, goal)
+        #success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        #self.move_to(black_shelves, goal)
+	#success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(before_lab_door, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(after_lab_door, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(corner, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(past_conference_room, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(end_cubes_1, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(end_cubes_2, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(end_cubes_3, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(end_cubes_1, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(corner, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        
+        self.move_to(after_lab_door, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+        self.move_to(jens_chair, goal)
+	success = self.move_base.wait_for_result(rospy.Duration(60)) 
 
 	if not success:
                 self.move_base.cancel_goal()
@@ -59,7 +100,14 @@ class GoToPose():
 		state = self.move_base.get_state()
 		if state == GoalStatus.SUCCEEDED:
 		    rospy.loginfo("Hooray, reached the desired pose")
-
+    
+    def move_to (self, target, goal):
+        x,y,z = target
+	goal.target_pose.pose = Pose(Point(x,y,z), Quaternion(0.000, 0.000, 0.892, -1.500))
+	#start moving
+        self.move_base.send_goal(goal)
+	#allow TurtleBot up to 60 seconds to complete task
+	#success = self.move_base.wait_for_result(rospy.Duration(60)) 
 
 
     def shutdown(self):
@@ -71,4 +119,5 @@ if __name__ == '__main__':
         GoToPose()
     except rospy.ROSInterruptException:
         rospy.loginfo("Exception thrown")
+
 
