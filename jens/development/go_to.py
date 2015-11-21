@@ -24,6 +24,7 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import actionlib
 from actionlib_msgs.msg import *
 from geometry_msgs.msg import Pose, PoseWithCovarianceStamped, Point, Quaternion, Twist
+from sys import executable
     
 
 class GoTo():
@@ -90,8 +91,8 @@ if __name__ == '__main__':
                 if line.startswith(location):
                     print "Found match for " + location 
                     assoc_map = next(lines)
-                    dock_points = next(lines)
-                    room_point = next(lines)
+                    dock_points = next(lines).rstrip('\n')
+                    room_point = next(lines).rstrip('\n')
                     #print "map is: " + assoc_map + "At Coordinates: " + room_point + " Dock Location: " + dock_points
                     return assoc_map,room_point,dock_points
         except rospy.ROSInterruptException: 
@@ -102,8 +103,18 @@ if __name__ == '__main__':
     the_map,room,dock = location_specs
     print "Map: " + the_map + "Target: " + room + "Home: " + dock
     print "Loading map..."
+    map_call = "loadmap " + the_map
+    #subprocess.Popen(map_call, shell=True, executable='/usr/local/bin/interactive_bash')
+    subprocess.Popen([map_call], shell=True, executable='/usr/local/bin/interactive_bash')
     print "Heading to location..."
+    target = room.split(",")
+    print target 
+    GoTo(target);
     print "Returning Home..."
+    GoTo(dock)
+    #subprocess.Popen('charger', shell=True, executable='/usr/local/bin/interactive_bash')
+    #subprocess.Popen('chargetime', shell=True, executable='/usr/local/bin/interactive_bash')
+
     #current = subprocess.call('rosrun tf tf_echo /map /base_link', shell=True)
     #subprocess.call('chargetime', shell=True, executable='/usr/local/bin/interactive_bash')
 
