@@ -105,14 +105,12 @@ if __name__ == '__main__':
     print "Map: " + the_map + "Target: " + room + "Home: " + dock
     print "Loading map..."
     map_call = "loadmap " + the_map
-    #subprocess.Popen(map_call, shell=True, executable='/usr/local/bin/interactive_bash')
-    #subprocess.Popen([map_call], shell=True, executable='/usr/local/bin/interactive_bash')
     print "Heading to location..."
     target = room.split(",")
     print target 
-    GoTo(target);
-    #print "Returning Home..."
-    #GoTo(dock)
+    GoTo(target)
+    print "Returning Home..."
+    GoTo(dock)
     #subprocess.Popen('charger', shell=True, executable='/usr/local/bin/interactive_bash')
     #subprocess.Popen('chargetime', shell=True, executable='/usr/local/bin/interactive_bash')
 
