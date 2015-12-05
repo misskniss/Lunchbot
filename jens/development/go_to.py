@@ -1,19 +1,5 @@
 #!/usr/bin/env python
 
-'''
-Copyright (c) 2015, Mark Silliman
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'''
 
 #TurtleBot must have minimal.launch & amcl_demo.launch running prior to starting this script.
 
@@ -54,7 +40,7 @@ class GoTo():
         self.move_base.send_goal(goal)
 
 	#allow TurtleBot up to 60 seconds to complete task
-	success = self.move_base.wait_for_result(rospy.Duration(60)) 
+	success = self.move_base.wait_for_result(rospy.Duration(90)) 
 
 
 	if not success:
@@ -112,8 +98,6 @@ if __name__ == '__main__':
     print "Returning Home..."
     GoTo(dock)
     #subprocess.Popen('charger', shell=True, executable='/usr/local/bin/interactive_bash')
-    #subprocess.Popen('chargetime', shell=True, executable='/usr/local/bin/interactive_bash')
+    subprocess.Popen('chargetime', shell=True, executable='/usr/local/bin/interactive_bash')
 
-    #current = subprocess.call('rosrun tf tf_echo /map /base_link', shell=True)
-    #subprocess.call('chargetime', shell=True, executable='/usr/local/bin/interactive_bash')
 
