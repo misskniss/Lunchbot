@@ -96,7 +96,8 @@ if __name__ == '__main__':
     print target 
     GoTo(target)
     print "Returning Home..."
-    GoTo(dock)
+    near_dock = dock.split(",")
+    GoTo(near_dock)
     #subprocess.Popen('charger', shell=True, executable='/usr/local/bin/interactive_bash')
     subprocess.Popen('chargetime', shell=True, executable='/usr/local/bin/interactive_bash')
 
