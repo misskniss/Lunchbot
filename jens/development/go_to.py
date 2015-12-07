@@ -40,7 +40,7 @@ class GoTo():
         self.move_base.send_goal(goal)
 
 	#allow TurtleBot up to 60 seconds to complete task
-	success = self.move_base.wait_for_result(rospy.Duration(90)) 
+	success = self.move_base.wait_for_result(rospy.Duration(240)) 
 
 
 	if not success:
